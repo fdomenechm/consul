@@ -584,35 +584,6 @@ feature 'Budget Investments' do
   context "Orders" do
     before { budget.update(phase: 'selecting') }
 
-    scenario "Default order is random" do
-      per_page = Kaminari.config.default_per_page
-      (per_page + 100).times { create(:budget_investment) }
-
-      visit budget_investments_path(budget, heading_id: heading.id)
-      order = all(".budget-investment h3").collect {|i| i.text }
-
-      visit budget_investments_path(budget, heading_id: heading.id)
-      new_order = eq(all(".budget-investment h3").collect {|i| i.text })
-
-      expect(order).not_to eq(new_order)
-    end
-
-    scenario "Random order after another order" do
-      per_page = Kaminari.config.default_per_page
-      (per_page + 2).times { create(:budget_investment) }
-
-      visit budget_investments_path(budget, heading_id: heading.id)
-      click_link "highest rated"
-      click_link "random"
-
-      order = all(".budget-investment h3").collect {|i| i.text }
-
-      visit budget_investments_path(budget, heading_id: heading.id)
-      new_order = eq(all(".budget-investment h3").collect {|i| i.text })
-
-      expect(order).not_to eq(new_order)
-    end
-
     scenario 'Random order maintained with pagination' do
       per_page = Kaminari.config.default_per_page
       (per_page + 2).times { create(:budget_investment, heading: heading) }
